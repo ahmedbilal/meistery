@@ -1,0 +1,9 @@
+{% extends "meisteryapp/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h1>Update Product Sold</h1>
+<form method="post">{% csrf_token %}
+    {{ form|crispy }}
+    <input type="submit" class="btn btn-primary" value="Create/Update" />
+</form>
+{% endblock %}
