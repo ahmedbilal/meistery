@@ -3,30 +3,32 @@ from .forms import CustomUserCreationForm, UpdateProductInfoForm, CustomUserChan
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
-class UserCreateView(generic.CreateView):
+class AdminStaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.is_staff
+
+
+class UserCreateView(AdminStaffRequiredMixin, generic.CreateView):
     form_class = CustomUserCreationForm
     template_name = "meisteryapp/create_user.html"
     success_url = reverse_lazy("list_user")
 
 
-class UserUpdateView(generic.UpdateView):
+class UserUpdateView(AdminStaffRequiredMixin, generic.UpdateView):
     form_class = CustomUserChangeForm
     model = get_user_model()
     template_name = "meisteryapp/create_user.html"
     success_url = reverse_lazy("list_user")
 
-    # def get_form_kwargs(self):
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs['initial']['product_sold'] = ''
-    #     return kwargs
 
-class UserListView(generic.ListView):
+class UserListView(AdminStaffRequiredMixin, generic.ListView):
     model = get_user_model()
     template_name = "meisteryapp/list_user.html"
 
 
-class UpdateProductInfoView(generic.FormView):
+class UpdateProductInfoView(AdminStaffRequiredMixin, generic.FormView):
     form_class = UpdateProductInfoForm
     template_name = "meisteryapp/update_product_info.html"
     success_url = reverse_lazy("update_product_info")

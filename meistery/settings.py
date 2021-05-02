@@ -129,5 +129,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 AUTH_USER_MODEL = 'meisteryapp.User'
-
+LOGIN_URL = '/admin/'
 django_heroku.settings(locals())
